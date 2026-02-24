@@ -1,0 +1,3 @@
+- Workshop 1: [Gemini-Powered YouTube Summarizer](https://codelabs.developers.google.com/devsite/codelabs/build-youtube-summarizer#1)
+- Workshop 2: [Google Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity)
+- Workshop 3: [BuildInstaVibe](https://codelabs.developers.google.com/instavibe-adk-multi-agents/)
