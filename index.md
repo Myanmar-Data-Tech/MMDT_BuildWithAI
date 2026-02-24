@@ -12,23 +12,14 @@ Welcome to the Build with AI workshop organized by MMDT!
 
 ## Schedule (MMT)
 
-### Day 1 — May 1, 2026
-| Time (MMT) | Session |
-|------------------------|---------------------------|
-| **9:00 AM – 10:30 AM** | Opening + Walk thorugh GDP|
-| **7:30 PM – 9:30 PM**  | Workshop for Beginners    |
-
-### Day 2 — May 2, 2026
-| Time (MMT) | Session |
-|------------------------|---------------------------|
-| **9:00 AM – 11:00 AM** | Workshop for Intermediate |
-| **7:30 PM – 9:30 PM**  | Workshop for advance.     |
-
-### Day 3 — May 3, 2026
-| Time (MMT) | Session |
-|------------------------|---------------------------|
-| **9:00 AM – 10:30 AM** | Project Time   |
-| **7:00 PM – 9:30 PM**  | Student Project Showcase  |
+| Date | Time (MMT) | Session |
+|------|------------|---------|
+| **May 1, 2026** | **9:00 AM – 10:30 AM** | Opening + Walkthrough GDP |
+| **May 1, 2026** | **7:30 PM – 9:30 PM**  | Workshop for Beginners |
+| **May 2, 2026** | **9:00 AM – 11:00 AM** | Workshop for Intermediate |
+| **May 2, 2026** | **7:30 PM – 9:30 PM**  | Workshop for Advanced |
+| **May 3, 2026** | **9:00 AM – 4:30 PM**  | Project Time |
+| **May 3, 2026** | **7:00 PM – 9:30 PM**  | Student Project Showcase |
 
 
 
