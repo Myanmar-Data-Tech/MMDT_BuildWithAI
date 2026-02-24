@@ -2,7 +2,8 @@
 
 Welcome to the Build with AI workshop organized by MMDT!
 
-**Theme**: Thematic Hands-On Workshop
+**Theme**: Hands-On Workshop
+
 **Dates**: May 1–3, 2026 (MMT)
 
 ## Workshops
