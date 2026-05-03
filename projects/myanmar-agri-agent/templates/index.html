@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ရွှေတောင်သူ အကြံပေး (Shwe Taung Thu Advisor)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .prose p { margin-bottom: 0.5rem; }
+        .prose ul, .prose ol { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .prose li { margin-bottom: 0.25rem; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Custom audio player styling */
+        audio::-webkit-media-controls-enclosure {
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .user-message audio::-webkit-media-controls-panel {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-stone-100 h-screen flex flex-col overflow-hidden">
+
+    <div class="flex flex-col h-full max-w-4xl mx-auto w-full bg-stone-50 shadow-xl">
+        <!-- Header -->
+        <header class="bg-green-700 text-white p-4 flex items-center gap-3 shadow-md z-10">
+            <div class="bg-white/20 p-2 rounded-lg">
+                <i data-lucide="leaf" class="text-green-100 w-7 h-7"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wide">ရွှေတောင်သူ အကြံပေး</h1>
+                <p class="text-green-200 text-sm">AI Agricultural Assistant</p>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <main id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')]">
+            <div id="messages-list" class="flex flex-col justify-end min-h-full">
+                <!-- Messages will be injected here -->
+            </div>
+            
+            <!-- Loading Indicator -->
+            <div id="typing-indicator" class="hidden w-full mb-6 flex justify-start animate-fadeIn">
+                <div class="flex flex-row max-w-[85%]">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-emerald-100 mr-3 border border-emerald-200 flex items-center justify-center">
+                        <i data-lucide="sprout" class="text-emerald-700 animate-pulse w-6 h-6"></i>
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <div class="px-4 py-3 rounded-2xl shadow-sm bg-white text-stone-800 border border-stone-200 rounded-tl-none">
+                            <div class="flex gap-1">
+                                <span class="w-2 h-2 bg-stone-300 rounded-full animate-bounce"></span>
+                                <span class="w-2 h-2 bg-stone-300 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                <span class="w-2 h-2 bg-stone-300 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="bg-white border-t border-stone-200 p-4 pb-safe">
+            <div class="max-w-4xl mx-auto relative">
+                
+                <!-- Recording UI -->
+                <div id="recording-ui" class="hidden flex items-center justify-between bg-red-50 rounded-full px-6 py-3 border border-red-200">
+                    <div class="flex items-center gap-3 text-red-600">
+                        <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                        <span class="font-medium">အသံဖမ်းနေသည်... (Recording)</span>
+                        <span id="recording-timer" class="font-mono">0:00</span>
+                    </div>
+                    <button id="stop-recording-btn" class="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors">
+                        <i data-lucide="square" class="w-5 h-5 fill-current"></i>
+                    </button>
+                </div>
+
+                <!-- Text Input Form -->
+                <form id="input-form" class="flex items-end gap-2">
+                    <div class="flex-1 bg-stone-100 rounded-2xl border border-stone-200 focus-within:border-green-500 focus-within:ring-1 focus-within:ring-green-500 transition-all overflow-hidden flex items-center">
+                        <input
+                            type="text"
+                            id="user-input"
+                            placeholder="စိုက်ပျိုးရေး ပြဿနာများကို မေးမြန်းပါ..."
+                            class="w-full bg-transparent px-4 py-3 outline-none text-stone-800 placeholder-stone-500"
+                            autocomplete="off"
+                        >
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        id="send-btn"
+                        class="hidden p-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors disabled:opacity-50 flex-shrink-0"
+                    >
+                        <i data-lucide="send" class="w-6 h-6"></i>
+                    </button>
+                    
+                    <button
+                        type="button"
+                        id="mic-btn"
+                        class="p-3 bg-emerald-100 text-emerald-700 rounded-full hover:bg-emerald-200 transition-colors disabled:opacity-50 flex-shrink-0"
+                        title="အသံဖြင့်မေးရန် (Ask with voice)"
+                    >
+                        <i data-lucide="mic" class="w-6 h-6"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        const messagesList = document.getElementById('messages-list');
+        const chatContainer = document.getElementById('chat-container');
+        const inputForm = document.getElementById('input-form');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const micBtn = document.getElementById('mic-btn');
+        const recordingUi = document.getElementById('recording-ui');
+        const stopRecordingBtn = document.getElementById('stop-recording-btn');
+        const recordingTimer = document.getElementById('recording-timer');
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        let isLoading = false;
+        let isRecording = false;
+        let recordingStartTime;
+        let recordingInterval;
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const INITIAL_MESSAGE = {
+            role: 'model',
+            text: 'မင်္ဂလာပါ။ ကျွန်တော်က ရွှေတောင်သူ စိုက်ပျိုးရေးအကြံပေးပါ။ သီးနှံရောဂါ၊ ပိုးမွှားအန္တရာယ်နဲ့ စိုက်ပျိုးရေးနည်းစနစ်တွေကို အသံဖြင့်ဖြစ်စေ၊ စာဖြင့်ဖြစ်စေ မေးမြန်းနိုင်ပါတယ်။\n\n(Hello. I am the Shwe Taung Thu Agricultural Advisor. You can ask about crop diseases, pests, and farming techniques via voice or text.)',
+            timestamp: new Date()
+        };
+
+        function formatTime(date) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addMessage(msg) {
+            const isUser = msg.role === 'user';
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex w-full mb-6 animate-fadeIn ${isUser ? 'justify-end' : 'justify-start'}`;
+            
+            let contentHtml = isUser ? msg.text : marked.parse(msg.text);
+            
+            // Add audio player if audio exists
+            let audioHtml = '';
+            if (msg.audioUrl) {
+                audioHtml = `
+                    <div class="mb-2 flex items-center gap-2 bg-black/10 p-2 rounded-lg">
+                        <i data-lucide="mic" class="w-4 h-4 text-white"></i>
+                        <audio controls src="${msg.audioUrl}" class="h-8 w-48"></audio>
+                    </div>
+                `;
+            }
+
+            messageDiv.innerHTML = `
+                <div class="flex max-w-[85%] md:max-w-[75%] ${isUser ? 'flex-row-reverse' : 'flex-row'}">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${
+                        isUser ? 'bg-green-600 ml-3' : 'bg-emerald-100 mr-3 border border-emerald-200'
+                    }">
+                        <i data-lucide="${isUser ? 'user' : 'sprout'}" class="${isUser ? 'text-white' : 'text-emerald-700'} w-6 h-6"></i>
+                    </div>
+                    <div class="flex flex-col ${isUser ? 'items-end' : 'items-start'}">
+                        <div class="px-4 py-3 rounded-2xl shadow-sm ${
+                            isUser 
+                                ? 'bg-green-600 text-white rounded-tr-none' 
+                                : 'bg-white text-stone-800 border border-stone-200 rounded-tl-none'
+                        }">
+                            ${audioHtml}
+                            <div class="prose prose-sm max-w-none ${isUser ? 'prose-invert text-white' : 'text-stone-800'}">
+                                ${contentHtml}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 mt-1 px-1">
+                            <span class="text-xs text-stone-400">${formatTime(msg.timestamp)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            messagesList.appendChild(messageDiv);
+            lucide.createIcons();
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Initialize with first message
+        addMessage(INITIAL_MESSAGE);
+
+        userInput.addEventListener('input', () => {
+            if (userInput.value.trim()) {
+                sendBtn.classList.remove('hidden');
+                micBtn.classList.add('hidden');
+            } else {
+                sendBtn.classList.add('hidden');
+                micBtn.classList.remove('hidden');
+            }
+        });
+
+        async function handleSend(text, audioBase64 = null, audioUrl = null) {
+            if ((!text && !audioBase64) || isLoading) return;
+            
+            isLoading = true;
+            addMessage({ 
+                role: 'user', 
+                text: text || 'အသံဖြင့် မေးမြန်းချက် (Voice query)', 
+                audioUrl: audioUrl,
+                timestamp: new Date() 
+            });
+            
+            userInput.value = '';
+            sendBtn.classList.add('hidden');
+            micBtn.classList.remove('hidden');
+            
+            // Show loading
+            typingIndicator.classList.remove('hidden');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: text,
+                        audio_base64: audioBase64
+                    })
+                });
+                const data = await response.json();
+                typingIndicator.classList.add('hidden');
+                addMessage({ role: 'model', text: data.reply, timestamp: new Date() });
+            } catch (error) {
+                typingIndicator.classList.add('hidden');
+                addMessage({ role: 'model', text: "အမှားအယွင်းဖြစ်ပေါ်နေပါသည်။ (An error occurred.)", timestamp: new Date() });
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        inputForm.onsubmit = (e) => {
+            e.preventDefault();
+            handleSend(userInput.value.trim());
+        };
+
+        // MediaRecorder & Web Speech API for voice input
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        micBtn.onclick = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                let transcript = '';
+                let recognition;
+                if (SpeechRecognition) {
+                    recognition = new SpeechRecognition();
+                    recognition.lang = 'my-MM';
+                    recognition.onresult = (e) => {
+                        transcript = e.results[0][0].transcript;
+                    };
+                    recognition.start();
+                }
+
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // Convert blob to base64
+                    const reader = new FileReader();
+                    reader.readAsDataURL(audioBlob);
+                    reader.onloadend = () => {
+                        const base64Audio = reader.result.split(',')[1];
+                        handleSend(transcript, base64Audio, audioUrl);
+                    };
+
+                    stream.getTracks().forEach(t => t.stop());
+                    if (recognition) recognition.stop();
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+                inputForm.classList.add('hidden');
+                recordingUi.classList.remove('hidden');
+                
+                recordingInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                    const mins = Math.floor(elapsed / 60);
+                    const secs = elapsed % 60;
+                    recordingTimer.innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+
+            } catch (err) {
+                alert("Microphone access denied.");
+            }
+        };
+
+        stopRecordingBtn.onclick = () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                finishRecording();
+            }
+        };
+
+        function finishRecording() {
+            isRecording = false;
+            clearInterval(recordingInterval);
+            recordingUi.classList.add('hidden');
+            inputForm.classList.remove('hidden');
+            recordingTimer.innerText = '0:00';
+        }
+
+    </script>
+</body>
+</html>
