@@ -11,6 +11,7 @@ LANPYA is an AI-powered study planner that generates personalized learning paths
 
 The system helps solve the problem of scattered learning resources and lack of structured career guidance. The project uses **Google Gemini 2.5 Flash** to help generate structured learning plans, recommended resources, and weekly study schedules.
 
+![Demo Screenshot](./demo.png)
 
 ##  Objective
 - Provide structured learning paths
