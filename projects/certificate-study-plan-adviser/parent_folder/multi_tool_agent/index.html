@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Certification Adviser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .prose h3 { font-weight: bold; font-size: 1.25rem; margin-top: 1rem; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; }
+        .prose p { margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-blue-800">🎓 Career Path Architect</h1>
+            <p class="text-gray-600 mt-2">Get personalized AI, Cloud, and Security certification roadmaps.</p>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex flex-col gap-4">
+                <textarea id="queryInput" rows="3" 
+                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="e.g., I want a roadmap for Generative AI and LLMs starting as a beginner..."></textarea>
+                <button onclick="sendQuery()" id="submitBtn"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    Generate My Plan
+                </button>
+            </div>
+        </div>
+
+        <div id="loading" class="hidden text-center py-4">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p class="mt-2 text-blue-600 font-medium">Architecting your career path... this may take a minute.</p>
+        </div>
+
+        <div id="responseContainer" class="hidden bg-white rounded-lg shadow-md p-8 prose max-w-none">
+            <div id="responseText"></div>
+        </div>
+    </div>
+
+    <script>
+        async function sendQuery() {
+            const query = document.getElementById('queryInput').value;
+            const btn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const container = document.getElementById('responseContainer');
+            const responseText = document.getElementById('responseText');
+
+            if (!query) return alert("Please enter a query!");
+
+            // UI State
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            container.classList.add('hidden');
+
+            try {
+                const response = await fetch('/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                const data = await response.json();
+                responseText.innerHTML = marked.parse(data.answer || "No response received.");
+                container.classList.remove('hidden');
+            } catch (error) {
+                responseText.innerHTML = `<p class="text-red-500">Error: ${error.message}. Make sure the Python server is running.</p>`;
+                container.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                loading.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
